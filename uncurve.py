@@ -67,12 +67,7 @@ def uncurve_text(input_path, output_path):
   cv2.imwrite(output_path, image)
 
 if __name__ == "__main__":
-
+  
     input_path = './sample.png'
     output_path = './output.png'
-
-    start = time.time()
     uncurve_text(input_path, output_path)
-    end = time.time()
-
-    print(end - start)
