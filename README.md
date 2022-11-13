@@ -9,3 +9,6 @@
 ```
 uncurve(input_path, output_path)
 ```
+![Original image](./images/sample.png)
+
+![Output image](./images/output.png)
