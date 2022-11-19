@@ -1,4 +1,4 @@
-# simple-curved-text-alignment
+# curved-text-alignment
 
 1) First you need to make sure you have installed the pygam package.
 ```
