@@ -7,7 +7,7 @@
 
 2) Run the "uncurve.py" script
 ```
-uncurve(input_path, output_path)
+uncurve(input_path = './input.png', output_path = './output.png')
 ```
 ![Original image](./images/sample.png?raw=true)
 
