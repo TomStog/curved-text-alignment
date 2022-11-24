@@ -47,7 +47,7 @@ def uncurve_text(input_path, output_path):
   outcome = ['Y']
   X = df[predictors].values
   y = df[outcome]
-  gam = LinearGAM(s(0, n_splines = 6))
+  gam = LinearGAM(n_splines = 6)
   gam.gridsearch(X, y)
 
   # Create the offset necessary to un-curve the text
