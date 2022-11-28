@@ -12,3 +12,7 @@ uncurve(input_path = './your_input.png', output_path = './your_output.png')
 ![Original image](./images/sample.png?raw=true)
 
 ![Output image](./images/output.png?raw=true)
+
+![Original image](./images/sample1.png?raw=true)
+
+![Output image](./images/output1.png?raw=true)
