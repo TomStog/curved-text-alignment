@@ -18,17 +18,19 @@ uncurve(input_path = './your_input.png', output_path = './your_output.png')
 
 2) Convert from RGB to Grayscale :
 
-![Output image](./images/output.png?raw=true)
+![Output image](./images/gray.png?raw=true)
 
 3) Apply Otsu's Thresholding Method :
 
-![Original image](./images/sample1.png?raw=true)
+![Original image](./images/otsu.png?raw=true)
 
 4) Create Scatterplot :
 
-![Output image](./images/output1.png?raw=true)
+![Output image](./images/scatter.png?raw=true)
 
 5) Calculate curve using Generalized Additive Model :
+
+![Output image](./images/poly.png?raw=true)
 
 6) Final Image :
 
