@@ -7,7 +7,7 @@ import time
 import pandas as pd
 from pygam import GAM, LinearGAM, s, f, te
 
-def uncurve_text(input_path, output_path):
+def uncurve_text(input_path, output_path, n_splines = 6):
   # Load image, grayscale it, Otsu's threshold
   image = cv2.imread(input_path)
   gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -47,7 +47,7 @@ def uncurve_text(input_path, output_path):
   outcome = ['Y']
   X = df[predictors].values
   y = df[outcome]
-  gam = LinearGAM(n_splines = 6)
+  gam = LinearGAM(n_splines = n_splines)
   gam.gridsearch(X, y)
 
   # Create the offset necessary to un-curve the text
