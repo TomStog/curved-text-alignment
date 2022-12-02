@@ -68,6 +68,4 @@ def uncurve_text(input_path, output_path, n_splines = 6):
 
 if __name__ == "__main__":
   
-    input_path = './sample.png'
-    output_path = './output.png'
     uncurve_text(input_path, output_path)
