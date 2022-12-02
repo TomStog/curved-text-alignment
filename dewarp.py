@@ -1,7 +1,8 @@
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import csv
+import sys
 import os
 import time
 import pandas as pd
@@ -68,4 +69,6 @@ def uncurve_text(input_path, output_path, n_splines = 6):
 
 if __name__ == "__main__":
   
-    uncurve_text(input_path, output_path)
+  input_path = sys.argv[1]
+  output_path = sys.argv[2]
+  uncurve_text(input_path, output_path)
