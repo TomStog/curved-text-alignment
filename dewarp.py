@@ -8,7 +8,7 @@ import time
 import pandas as pd
 from pygam import GAM, LinearGAM, s, f, te
 
-def uncurve_text(input_path, output_path, n_splines = 6):
+def dewarp_text(input_path, output_path, n_splines = 6):
   # Load image, grayscale it, Otsu's threshold
   image = cv2.imread(input_path)
   gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -71,4 +71,4 @@ if __name__ == "__main__":
     
     input_path = sys.argv[1]
     output_path = sys.argv[2]
-    uncurve_text(input_path, output_path)
+    dewarp_text(input_path, output_path)
