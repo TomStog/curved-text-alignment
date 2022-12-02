@@ -7,7 +7,7 @@
 
 2) Run the "uncurve.py" script :
 ```
-uncurve(input_path = './your_input.png', output_path = './your_output.png')
+python ./dewarp.py ./sample.png ./output.png
 ```
 
 # Steps
