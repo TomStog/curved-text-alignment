@@ -1,4 +1,4 @@
-# curved-text-alignment
+# Text Line Dewarping
 
 1) First you need to make sure you have installed the pygam package :
 ```
