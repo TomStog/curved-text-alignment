@@ -5,7 +5,7 @@
 !pip install pygam
 ```
 
-2) Run the "uncurve.py" script :
+2) Run the "dewarp.py" script :
 ```
 python ./dewarp.py ./sample.png ./output.png
 ```
