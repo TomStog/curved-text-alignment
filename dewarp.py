@@ -68,7 +68,7 @@ def uncurve_text(input_path, output_path, n_splines = 6):
   cv2.imwrite(output_path, image)
 
 if __name__ == "__main__":
-  
-  input_path = sys.argv[1]
-  output_path = sys.argv[2]
-  uncurve_text(input_path, output_path)
+    
+    input_path = sys.argv[1]
+    output_path = sys.argv[2]
+    uncurve_text(input_path, output_path)
