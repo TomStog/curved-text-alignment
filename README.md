@@ -42,6 +42,6 @@ python ./dewarp.py ./sample.png ./output.png
 
 ![Output image](./images/greek_input.png?raw=true)
 
-2) Input Image :
+2) Output Image :
 
 ![Output image](./images/greek_output.png?raw=true)
