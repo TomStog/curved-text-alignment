@@ -37,3 +37,11 @@ python ./dewarp.py ./sample.png ./output.png
 ![Output image](./images/output.png?raw=true)
 
 # Greek Text Example
+
+1) Input Image :
+
+![Output image](./images/greek_input.png?raw=true)
+
+2) Input Image :
+
+![Output image](./images/greek_output.png?raw=true)
