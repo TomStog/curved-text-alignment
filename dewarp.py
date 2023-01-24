@@ -16,8 +16,8 @@ def dewarp_text(input_path, output_path, n_splines = 5):
 
   # Dilation & Erosion to fill holes inside the letters
   kernel = np.ones((3, 3), np.uint8)
-  thresh = cv2.dilate(thresh, kernel, iterations=1)
   thresh = cv2.erode(thresh, kernel, iterations=1)
+  thresh = cv2.dilate(thresh, kernel, iterations=1)  
 
   # Open csv file
   f = open('./scatterplot_records.csv', 'w')
