@@ -53,6 +53,11 @@ def dewarp_text(input_path, output_path, n_splines = 5):
 
   # Create the offset necessary to un-curve the text
   y_hat = gam.predict(np.linspace(0, thresh.shape[1], num = thresh.shape[1]))
+  
+  # Plot the image with text curve overlay
+  plt.imshow(image)
+  plt.plot(np.linspace(0, thresh.shape[1], num=thresh.shape[1]), (thresh.shape[0] - y_hat), color='red')
+  plt.show()
 
   # Roll each column to align the text
   for i in range(image.shape[1]):
@@ -61,8 +66,8 @@ def dewarp_text(input_path, output_path, n_splines = 5):
     image[:, i, 2] = np.roll(image[:, i, 2], round(y_hat[i] - thresh.shape[0]/2))
 
   # Plot the final image
-  #plt.imshow(image, cmap=plt.cm.gray)
-  #plt.show()
+  plt.imshow(image)
+  plt.show()
 
   # Save image to desired directory
   cv2.imwrite(output_path, image)
