@@ -1,6 +1,6 @@
 # Text Line Dewarping
 
-1) First you need to make sure you have installed the pygam package :
+1) First you need to make sure you have installed the PyGAM package :
 ```
 !pip install pygam
 ```
