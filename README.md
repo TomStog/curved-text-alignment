@@ -20,7 +20,7 @@ python ./dewarp.py ./sample.png ./output.png
 
 ![Output image](./images/gray.png?raw=true)
 
-3) Apply Otsu's Thresholding Method :
+3) Apply Otsu's Thresholding Method, Erosion and then Dilation :
 
 ![Original image](./images/otsu.png?raw=true)
 
