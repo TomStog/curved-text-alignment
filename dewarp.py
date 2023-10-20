@@ -1,10 +1,8 @@
 import cv2
 import numpy as np
-#import matplotlib.pyplot as plt
 import csv
 import sys
 import os
-import time
 import pandas as pd
 from pygam import GAM, LinearGAM, s, f, te
 
