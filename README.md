@@ -5,11 +5,11 @@
 !pip install pygam
 ```
 
-2a) Process the entire image -> Run the "dewarp.py" script :
+2) Process the entire image -> Run the "dewarp.py" script :
 ```
 python ./dewarp.py ./sample.png ./output.png
 ```
-2b) Process the image's area where there's text -> Run the "tight_dewarp.py" script :
+3) Process the image's area where there's text -> Run the "tight_dewarp.py" script :
 ```
 python ./tight_dewarp.py ./sample.png ./output.png
 ```
