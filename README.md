@@ -5,11 +5,11 @@
 !pip install pygam
 ```
 
-2) Run the "dewarp.py" script :
+2a) Process the entire image -> Run the "dewarp.py" script :
 ```
 python ./dewarp.py ./sample.png ./output.png
 ```
-If you want to focus only on the text and NOT on the entire image, run the "tight_dewarp.py" script :
+2b) Process the image's area where there's text -> Run the "tight_dewarp.py" script :
 ```
 python ./tight_dewarp.py ./sample.png ./output.png
 ```
