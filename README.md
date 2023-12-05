@@ -9,6 +9,10 @@
 ```
 python ./dewarp.py ./sample.png ./output.png
 ```
+If you want to focus only on the text and NOT on the entire image, run the "tight_dewarp.py" script :
+```
+python ./tight_dewarp.py ./sample.png ./output.png
+```
 
 # Steps
 
