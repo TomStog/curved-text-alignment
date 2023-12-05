@@ -65,7 +65,7 @@ def dewarp_text(input_path, output_path, n_splines = 5):
     image[:, i, 2] = np.roll(image[:, i, 2], round(y_hat[i] - thresh.shape[0]/2))
 
   # Plot the final image
-  plt.imshow(image)
+  plt.imshow(image[:,:,::-1])
   plt.show()
 
   # Save image to desired directory
