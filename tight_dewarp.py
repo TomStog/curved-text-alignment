@@ -21,7 +21,6 @@ def uncurve_text(input_path, output_path, n_splines = 5):
   black_pixels = np.where(thresh == 0)
   leftmost_x = np.min(black_pixels[1])
   rightmost_x = np.max(black_pixels[1])
-  #print(leftmost_x, rightmost_x, thresh.shape[0], thresh.shape[1])
 
   # Open csv file
   f = open('./scatterplot_records.csv', 'w')
