@@ -51,11 +51,11 @@ def dewarp_text(input_path, output_path, n_splines = 5):
   gam.gridsearch(X, y)
 
   # Create the offset necessary to un-curve the text
-  y_hat = gam.predict(np.linspace(0, thresh.shape[1], num = thresh.shape[1]))
+  y_hat = gam.predict(np.linspace(0, thresh.shape[1] - 1, num = thresh.shape[1]))
   
   # Plot the image with text curve overlay
   plt.imshow(image[:,:,::-1])
-  plt.plot(np.linspace(0, thresh.shape[1], num=thresh.shape[1]), (thresh.shape[0] - y_hat), color='red')
+  plt.plot(np.linspace(0, thresh.shape[1] - 1, num = thresh.shape[1]), (thresh.shape[0] - y_hat), color='red')
   plt.show()
 
   # Roll each column to align the text
