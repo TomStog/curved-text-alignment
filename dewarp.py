@@ -4,7 +4,7 @@ import csv
 import sys
 import os
 import pandas as pd
-from pygam import GAM, LinearGAM, s, f, te
+from pygam import LinearGAM
 
 def dewarp_text(input_path, output_path, n_splines = 5):
   # Load image, grayscale it, Otsu's threshold
