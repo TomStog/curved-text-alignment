@@ -51,7 +51,7 @@ Both functions exhibit comparable performance, with no discernible advantage in 
 
 ![Output image](./images/greek_output.png?raw=true)
 
-#Citation
+# Citation
 If you have found value in this repository, we kindly request that you consider citing it as a source of reference:
 
 Stogiannopoulos, Thomas. “Curved Line Text Alignment: A Function That Takes as Input a Cropped Text Line Image, and Outputs the Dewarped Image.” 
