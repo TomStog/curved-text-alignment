@@ -48,7 +48,7 @@ def dewarp_text(input_path, output_path, n_splines = 5):
   X = df[predictors].values
   y = df[outcome]
   gam = LinearGAM(n_splines = n_splines)
-  gam.gridsearch(X, y)
+  gam.fit(X, y)
 
   # Create the offset necessary to un-curve the text
   y_hat = gam.predict(np.linspace(0, thresh.shape[1]-1, num = thresh.shape[1]))
