@@ -64,6 +64,20 @@ Both functions exhibit comparable performance, with no discernible advantage in 
 
 ![Output image](./images/greek_output.png?raw=true)
 
+## Rectification
+
+1) Input Image :
+
+![Output image](./images/sport.png?raw=true)
+
+2) Semi-processed Image :
+
+![Output image](./images/sports_output.png?raw=true)
+
+3) Output Image :
+
+![Output image](./images/sports_final.png?raw=true)
+
 ## Citation
 
 If you have found value in this repository, we kindly request that you consider citing it as a source of reference:
