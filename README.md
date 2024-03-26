@@ -62,10 +62,6 @@ Both functions exhibit comparable performance, with no discernible advantage in 
 
 ## Rectification
 
-```shell
-python ./tight_dewarp.py ./sample.png ./output.png
-```
-
 1) Input Image :
 
 ![Output image](./images/sports.png?raw=true)
