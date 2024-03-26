@@ -112,7 +112,7 @@ def uncurve_text_tight(input_path, output_path, n_splines = 5):
     my_iter += 1 
   
   # Plot the final image
-  plt.imshow(dewarp_image)
+  plt.imshow(dewarp_image, cmap=plt.cm.gray)
   plt.show()
 
   # Save image to desired directory
