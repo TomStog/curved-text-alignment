@@ -1,10 +1,7 @@
 import cv2
 import numpy as np
-import csv
 import matplotlib.pyplot as plt
 import sys
-import os
-import pandas as pd
 from pygam import LinearGAM
 
 def dewarp_text(input_path, output_path, n_splines = 5):
@@ -18,35 +15,11 @@ def dewarp_text(input_path, output_path, n_splines = 5):
   thresh = cv2.erode(thresh, kernel, iterations=1)
   thresh = cv2.dilate(thresh, kernel, iterations=1)  
 
-  # Open csv file
-  f = open('./scatterplot_records.csv', 'w')
-
-  # Create the csv writer
-  writer = csv.writer(f)
-  writer.writerow(['X', 'Y'])
-
-  # Write in csv file
-  for x in range(thresh.shape[0]):
-    for y in range(thresh.shape[1]):
-      # Search for black pixels
-      if (thresh[x][y] <= 128):
-        #writer.writerow([y, x])                        # reverse/mirrored scatter-plot image
-        writer.writerow([y, thresh.shape[0] - x])       # normal scatter-plot image
-
-  # Close csv file
-  f.close()
-
-  # Read CSV file and extract info
-  df = pd.read_csv('./scatterplot_records.csv', sep = ",")
-
-  # Delete csv file
-  os.remove('./scatterplot_records.csv')
-
-  # Build GAM & define its parameters
-  predictors = ['X']
-  outcome = ['Y']
-  X = df[predictors].values
-  y = df[outcome]
+  black_pixels = np.column_stack(np.where(thresh == 0))
+  X = black_pixels[:, 1].reshape(-1, 1)
+  y = black_pixels[:, 0]
+  y = thresh.shape[0] - y
+  
   gam = LinearGAM(n_splines = n_splines)
   gam.fit(X, y)
 
