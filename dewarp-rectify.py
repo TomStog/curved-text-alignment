@@ -1,13 +1,8 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-import sys
-import csv
-import os
-import pandas as pd
 from pygam import LinearGAM
 from bresenham import bresenham
-import numpy as np
 from scipy.interpolate import interp1d
 
 def reshape_array_with_interpolation(original_array, new_size, kind='linear'):
@@ -81,39 +76,11 @@ def uncurve_text_tight(input_path, output_path, n_splines = 5):
   thresh = cv2.erode(thresh, kernel, iterations=1)
   thresh = cv2.dilate(thresh, kernel, iterations=1)
 
-  black_pixels = np.where(thresh == 0)
-  leftmost_x = np.min(black_pixels[1])
-  rightmost_x = np.max(black_pixels[1])
+  black_pixels = np.column_stack(np.where(thresh == 0))
+  leftmost_x, rightmost_x = np.min(black_pixels[:, 1]), np.max(black_pixels[:, 1])
+  X = black_pixels[:, 1].reshape(-1, 1)
+  y = black_pixels[:, 0]
 
-  # Open csv file
-  f = open('./scatterplot_records.csv', 'w')
-
-  # Create the csv writer
-  writer = csv.writer(f)
-  writer.writerow(['X', 'Y'])
-
-  # Write in csv file
-  for x in range(thresh.shape[0]):
-    for y in range(leftmost_x, rightmost_x):
-      # Search for black pixels
-      if (thresh[x][y] <= 128):
-        writer.writerow([y, x])                        # reverse/mirrored scatter-plot image
-        #writer.writerow([y, thresh.shape[0] - x])       # normal scatter-plot image
-
-  # Close csv file
-  f.close()
-
-  # Read CSV file and extract info
-  df = pd.read_csv('./scatterplot_records.csv', sep = ",")
-
-  # Delete csv file
-  os.remove('./scatterplot_records.csv')
-
-  # Build GAM & define its parameters
-  predictors = ['X']
-  outcome = ['Y']
-  X = df[predictors].values
-  y = df[outcome]
   gam = LinearGAM(n_splines = n_splines)
   gam.fit(X, y)
 
@@ -121,7 +88,7 @@ def uncurve_text_tight(input_path, output_path, n_splines = 5):
 
   # Create the offset necessary to un-curve the text
   y_hat = gam.predict(X_new)
-  d = 25
+  d = 15
 
   # Create an image full of zeros
   dewarp_image = np.zeros(((2*d+1), len(X_new)), dtype=np.uint8) + 255
@@ -162,40 +129,12 @@ def uncurve_text(input_path, output_path, n_splines=5):
   thresh = cv2.erode(thresh, kernel, iterations=1)
   thresh = cv2.dilate(thresh, kernel, iterations=1)
 
-  black_pixels = np.where(thresh == 0)
-  leftmost_x = np.min(black_pixels[1])
-  rightmost_x = np.max(black_pixels[1])
-  #print(leftmost_x, rightmost_x, thresh.shape[0], thresh.shape[1])
+  black_pixels = np.column_stack(np.where(thresh == 0))
+  leftmost_x, rightmost_x = np.min(black_pixels[:, 1]), np.max(black_pixels[:, 1])
+  X = black_pixels[:, 1].reshape(-1, 1)
+  y = black_pixels[:, 0]
+  y = thresh.shape[0] - y
 
-  # Open csv file
-  f = open('./scatterplot_records.csv', 'w')
-
-  # Create the csv writer
-  writer = csv.writer(f)
-  writer.writerow(['X', 'Y'])
-
-  # Write in csv file
-  for x in range(thresh.shape[0]):
-    for y in range(leftmost_x, rightmost_x):
-      # Search for black pixels
-      if (thresh[x][y] <= 128):
-        #writer.writerow([y, x])                        # reverse/mirrored scatter-plot image
-        writer.writerow([y, thresh.shape[0] - x])       # normal scatter-plot image
-
-  # Close csv file
-  f.close()
-
-  # Read CSV file and extract info
-  df = pd.read_csv('./scatterplot_records.csv', sep = ",")
-
-  # Delete csv file
-  os.remove('./scatterplot_records.csv')
-
-  # Build GAM & define its parameters
-  predictors = ['X']
-  outcome = ['Y']
-  X = df[predictors].values
-  y = df[outcome]
   gam = LinearGAM(n_splines = n_splines)
   gam.fit(X, y)
 
