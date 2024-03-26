@@ -42,15 +42,11 @@ Both functions exhibit comparable performance, with no discernible advantage in 
 
 ![Original image](./images/otsu.png?raw=true)
 
-4) Create Scatterplot :
-
-![Output image](./images/scatter.png?raw=true)
-
-5) Calculate curve using Generalized Additive Model :
+4) Calculate curve using Generalized Additive Model :
 
 ![Output image](./images/poly.png?raw=true)
 
-6) Final Image :
+5) Final Image :
 
 ![Output image](./images/output.png?raw=true)
 
@@ -68,7 +64,7 @@ Both functions exhibit comparable performance, with no discernible advantage in 
 
 1) Input Image :
 
-![Output image](./images/sport.png?raw=true)
+![Output image](./images/sports.png?raw=true)
 
 2) Semi-processed Image :
 
