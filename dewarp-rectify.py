@@ -32,6 +32,56 @@ def reshape_array_with_interpolation(original_array, new_size, kind='linear'):
 
     return np.round(new_array)
 
+def pad_binary_image_with_ones(image):
+    """
+    Pad a binary image with 1's on all sides, doubling its size.
+
+    Parameters:
+    - image: a 2D numpy array representing the binary image.
+
+    Returns:
+    - A new 2D numpy array representing the padded image.
+    """
+    # Get the original image dimensions
+    original_height, original_width = image.shape
+    
+    # Create a new array of ones with double the dimensions of the original image
+    new_height = 2 * original_height
+    new_width = 2 * original_width
+    padded_image = np.ones((new_height, new_width), dtype=image.dtype) + 254
+    
+    # Copy the original image into the center of the new array
+    start_row = original_height // 2
+    start_col = original_width // 2
+    padded_image[start_row:start_row + original_height, start_col:start_col + original_width] = image
+    
+    return padded_image
+
+def find_distance_d(X, y, X_new, y_hat, step):
+    # Starting point for the distance d
+    d = 0
+    max_iterations = 1000  # Prevent infinite loops
+    iteration = 0
+    found = False
+
+    # Increment d until all points are covered or max_iterations is reached
+    while iteration < max_iterations and not found:
+        # Create two functions shifted by d
+        upper_function = y_hat + d
+        lower_function = y_hat - d
+        
+        # Check if all y points are within the bounds
+        all_points_covered = np.all([(y[i] <= upper_function[np.argmin(np.abs(X_new - X[i]))]) and 
+                                    (y[i] >= lower_function[np.argmin(np.abs(X_new - X[i]))]) for i in range(len(X_new))])
+            
+        if all_points_covered:
+            found = True
+        else:
+            d += step  # Increment d
+            iteration += 1
+
+    return int(np.ceil(1.5*d))
+
 def calculate_derivative(y_values):
     dy = np.zeros(y_values.shape)
     dy[0] = y_values[1] - y_values[0]  # Forward difference
@@ -70,6 +120,7 @@ def uncurve_text_tight(input_path, output_path, n_splines = 5):
   image = cv2.imread(input_path)
   gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
   thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+  thresh = pad_binary_image_with_ones(thresh)
 
   # Dilation & Erosion to fill holes inside the letters
   kernel = np.ones((3, 3), np.uint8)
@@ -77,7 +128,8 @@ def uncurve_text_tight(input_path, output_path, n_splines = 5):
   thresh = cv2.dilate(thresh, kernel, iterations=1)
 
   black_pixels = np.column_stack(np.where(thresh == 0))
-  leftmost_x, rightmost_x = np.min(black_pixels[:, 1]), np.max(black_pixels[:, 1])
+  leftmost_x = np.min(black_pixels[:, 1]) - int(0.05*(np.max(black_pixels[:, 1]) - np.min(black_pixels[:, 1])))
+  rightmost_x = np.max(black_pixels[:, 1]) + int(0.05*(np.max(black_pixels[:, 1]) - np.min(black_pixels[:, 1])))
   X = black_pixels[:, 1].reshape(-1, 1)
   y = black_pixels[:, 0]
 
@@ -87,8 +139,10 @@ def uncurve_text_tight(input_path, output_path, n_splines = 5):
   X_new = np.linspace(leftmost_x, rightmost_x - 1, num = rightmost_x - leftmost_x)
 
   # Create the offset necessary to un-curve the text
-  y_hat = gam.predict(X_new)
-  d = 15
+  y_hat = gam.predict(X_new)  
+
+  # Calculate height of text
+  d = find_distance_d(X, y, X_new, y_hat, step = 0.5)
 
   # Create an image full of zeros
   dewarp_image = np.zeros(((2*d+1), len(X_new)), dtype=np.uint8) + 255
