@@ -116,119 +116,119 @@ def find_perpendicular_points(y_values, x_values, d):
     return perpendicular_points
 
 def uncurve_text_tight(input_path, output_path, n_splines = 5):
-  # Load image, grayscale it, Otsu's threshold
-  image = cv2.imread(input_path)
-  gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-  thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-  thresh = pad_binary_image_with_ones(thresh)
+    # Load image, grayscale it, Otsu's threshold
+    image = cv2.imread(input_path)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+    thresh = pad_binary_image_with_ones(thresh)
+    
+    # Dilation & Erosion to fill holes inside the letters
+    kernel = np.ones((3, 3), np.uint8)
+    thresh = cv2.erode(thresh, kernel, iterations=1)
+    thresh = cv2.dilate(thresh, kernel, iterations=1)
+    
+    black_pixels = np.column_stack(np.where(thresh == 0))
+    leftmost_x = np.min(black_pixels[:, 1]) - int(0.1*(np.max(black_pixels[:, 1]) - np.min(black_pixels[:, 1])))
+    rightmost_x = np.max(black_pixels[:, 1]) + int(0.1*(np.max(black_pixels[:, 1]) - np.min(black_pixels[:, 1])))
+    X = black_pixels[:, 1].reshape(-1, 1)
+    y = black_pixels[:, 0]
+    
+    gam = LinearGAM(n_splines = n_splines)
+    gam.fit(X, y)
+    
+    X_new = np.linspace(leftmost_x, rightmost_x, num = rightmost_x - leftmost_x)
+    
+    # Create the offset necessary to un-curve the text
+    y_hat = gam.predict(X_new)
+    
+    # Plot the image with text curve overlay
+    plt.imshow(thresh, cmap='gray')
+    plt.plot(np.linspace(leftmost_x, rightmost_x, num = rightmost_x - leftmost_x), (y_hat), color='red')
+    plt.show()
+    
+    # Calculate height of text
+    d = find_distance_d(X, y, X_new, y_hat, step = 0.5)
+    
+    # Create an image full of zeros
+    dewarp_image = np.zeros(((2*d+1), len(X_new)), dtype=np.uint8) + 255
+    
+    # Calculate perpendicular points
+    perpendicular_points = find_perpendicular_points(y_hat, X_new, d)
+    my_iter = 0
 
-  # Dilation & Erosion to fill holes inside the letters
-  kernel = np.ones((3, 3), np.uint8)
-  thresh = cv2.erode(thresh, kernel, iterations=1)
-  thresh = cv2.dilate(thresh, kernel, iterations=1)
-
-  black_pixels = np.column_stack(np.where(thresh == 0))
-  leftmost_x = np.min(black_pixels[:, 1]) - int(0.1*(np.max(black_pixels[:, 1]) - np.min(black_pixels[:, 1])))
-  rightmost_x = np.max(black_pixels[:, 1]) + int(0.1*(np.max(black_pixels[:, 1]) - np.min(black_pixels[:, 1])))
-  X = black_pixels[:, 1].reshape(-1, 1)
-  y = black_pixels[:, 0]
-
-  gam = LinearGAM(n_splines = n_splines)
-  gam.fit(X, y)
-
-  X_new = np.linspace(leftmost_x, rightmost_x, num = rightmost_x - leftmost_x)
-
-  # Create the offset necessary to un-curve the text
-  y_hat = gam.predict(X_new)
-
-  # Plot the image with text curve overlay
-  plt.imshow(thresh, cmap='gray')
-  plt.plot(np.linspace(leftmost_x, rightmost_x, num = rightmost_x - leftmost_x), (y_hat), color='red')
-  plt.show()
-
-  # Calculate height of text
-  d = find_distance_d(X, y, X_new, y_hat, step = 0.5)
-
-  # Create an image full of zeros
-  dewarp_image = np.zeros(((2*d+1), len(X_new)), dtype=np.uint8) + 255
-
-  # Calculate perpendicular points
-  perpendicular_points = find_perpendicular_points(y_hat, X_new, d)
-  my_iter = 0
-
-  for points in perpendicular_points:
-    x1, y1, x2, y2 = [element for tup in points for element in tup]
-    if y1 > y2:  # If y1 is below y2, swap them to ensure top-to-bottom interpolation
-        y1, y2 = y2, y1
-        x1, x2 = x2, x1
-    # Extract pixel values
-    bresenham_list = list(bresenham(x1, y1, x2, y2))
-    # Extract pixel values, ensuring they are within the bounds of the image
-    pixel_values = []
-    for x, y in bresenham_list:
-        pixel_values.append(thresh[y, x])
-    dewarp_image[:, my_iter] = reshape_array_with_interpolation(np.array(pixel_values), (2*d+1), kind='linear')
-    my_iter += 1 
+    for points in perpendicular_points:
+        x1, y1, x2, y2 = [element for tup in points for element in tup]
+        if y1 > y2:  # If y1 is below y2, swap them to ensure top-to-bottom interpolation
+            y1, y2 = y2, y1
+            x1, x2 = x2, x1
+        # Extract pixel values
+        bresenham_list = list(bresenham(x1, y1, x2, y2))
+        # Extract pixel values, ensuring they are within the bounds of the image
+        pixel_values = []
+        for x, y in bresenham_list:
+            pixel_values.append(thresh[y, x])
+        dewarp_image[:, my_iter] = reshape_array_with_interpolation(np.array(pixel_values), (2*d+1), kind='linear')
+        my_iter += 1
   
-  # Plot the original image
-  plt.imshow(thresh, cmap='gray', extent=[0, thresh.shape[1], thresh.shape[0], 0])
-
-  # Plot the y_hat line
-  plt.plot(X_new, y_hat, color='red')
-
-  # Plot perpendicular points
-  for points in perpendicular_points:
+    # Plot the original image
+    plt.imshow(thresh, cmap='gray', extent=[0, thresh.shape[1], thresh.shape[0], 0])
+    
+    # Plot the y_hat line
+    plt.plot(X_new, y_hat, color='red')
+    
+    # Plot perpendicular points
+    for points in perpendicular_points:
       plt.plot([x[0] for x in points], [x[1] for x in points], color='blue', alpha=0.5)
-
-  plt.show()
-  
-  # Plot the final image
-  plt.imshow(dewarp_image, cmap=plt.cm.gray)
-  plt.show()
-
-  # Save image to desired directory
-  cv2.imwrite(output_path, dewarp_image)
+    
+    plt.show()
+    
+    # Plot the final image
+    plt.imshow(dewarp_image, cmap=plt.cm.gray)
+    plt.show()
+    
+    # Save image to desired directory
+    cv2.imwrite(output_path, dewarp_image)
 
 def uncurve_text(input_path, output_path, n_splines=5):
-  # Load image, grayscale it, Otsu's threshold
-  image = cv2.imread(input_path)
-  gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-  thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+    # Load image, grayscale it, Otsu's threshold
+    image = cv2.imread(input_path)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+    
+    # Dilation & Erosion to fill holes inside the letters
+    kernel = np.ones((3, 3), np.uint8)
+    thresh = cv2.erode(thresh, kernel, iterations=1)
+    thresh = cv2.dilate(thresh, kernel, iterations=1)
+    
+    black_pixels = np.column_stack(np.where(thresh == 0))
+    leftmost_x, rightmost_x = np.min(black_pixels[:, 1]), np.max(black_pixels[:, 1])
+    X = black_pixels[:, 1].reshape(-1, 1)
+    y = black_pixels[:, 0]
+    y = thresh.shape[0] - y
+    
+    gam = LinearGAM(n_splines = n_splines)
+    gam.fit(X, y)
+    
+    # Create the offset necessary to un-curve the text
+    y_hat = gam.predict(np.linspace(leftmost_x, rightmost_x, num = rightmost_x - leftmost_x + 1))
+    
+    # Plot the image with text curve overlay
+    plt.imshow(image[:,:,::-1])
+    plt.plot(np.linspace(leftmost_x, rightmost_x, num = rightmost_x - leftmost_x + 1), (thresh.shape[0] - y_hat), color='red')
+    plt.show()
 
-  # Dilation & Erosion to fill holes inside the letters
-  kernel = np.ones((3, 3), np.uint8)
-  thresh = cv2.erode(thresh, kernel, iterations=1)
-  thresh = cv2.dilate(thresh, kernel, iterations=1)
-
-  black_pixels = np.column_stack(np.where(thresh == 0))
-  leftmost_x, rightmost_x = np.min(black_pixels[:, 1]), np.max(black_pixels[:, 1])
-  X = black_pixels[:, 1].reshape(-1, 1)
-  y = black_pixels[:, 0]
-  y = thresh.shape[0] - y
-
-  gam = LinearGAM(n_splines = n_splines)
-  gam.fit(X, y)
-
-  # Create the offset necessary to un-curve the text
-  y_hat = gam.predict(np.linspace(leftmost_x, rightmost_x, num = rightmost_x - leftmost_x + 1))
-
-  # Plot the image with text curve overlay
-  plt.imshow(image[:,:,::-1])
-  plt.plot(np.linspace(leftmost_x, rightmost_x, num = rightmost_x - leftmost_x + 1), (thresh.shape[0] - y_hat), color='red')
-  plt.show()
-
-  # Roll each column to align the text
-  for i in range(leftmost_x, rightmost_x + 1):
-    image[:, i, 0] = np.roll(image[:, i, 0], round(y_hat[i - leftmost_x] - thresh.shape[0]/2))
-    image[:, i, 1] = np.roll(image[:, i, 1], round(y_hat[i - leftmost_x] - thresh.shape[0]/2))
-    image[:, i, 2] = np.roll(image[:, i, 2], round(y_hat[i - leftmost_x] - thresh.shape[0]/2))
+    # Roll each column to align the text
+    for i in range(leftmost_x, rightmost_x + 1):
+        image[:, i, 0] = np.roll(image[:, i, 0], round(y_hat[i - leftmost_x] - thresh.shape[0]/2))
+        image[:, i, 1] = np.roll(image[:, i, 1], round(y_hat[i - leftmost_x] - thresh.shape[0]/2))
+        image[:, i, 2] = np.roll(image[:, i, 2], round(y_hat[i - leftmost_x] - thresh.shape[0]/2))
   
-  # Plot the final image
-  plt.imshow(image[:,:,::-1])
-  plt.show()
-
-  # Save image to desired directory
-  cv2.imwrite(output_path, image)
+    # Plot the final image
+    plt.imshow(image[:,:,::-1])
+    plt.show()
+    
+    # Save image to desired directory
+    cv2.imwrite(output_path, image)
 
 if __name__ == "__main__":
     
