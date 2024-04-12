@@ -180,7 +180,6 @@ def uncurve_text_tight(input_path, output_path, n_splines = 5):
   for points in perpendicular_points:
       plt.plot([x[0] for x in points], [x[1] for x in points], color='blue', alpha=0.5)
 
-  plt.legend()
   plt.show()
   
   # Plot the final image
