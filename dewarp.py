@@ -17,22 +17,21 @@ def dewarp_text(input_path, output_path, n_splines = 5):
     
     black_pixels = np.column_stack(np.where(thresh == 0))
     X = black_pixels[:, 1].reshape(-1, 1)
-    y = black_pixels[:, 0]
-    y = thresh.shape[0] - y
+    y = thresh.shape[0] - black_pixels[:, 0]
     
     gam = LinearGAM(n_splines = n_splines)
     gam.fit(X, y)
     
     # Create the offset necessary to un-curve the text
-    y_hat = gam.predict(np.linspace(0, thresh.shape[1]-1, num = thresh.shape[1]))
+    y_hat = gam.predict(np.linspace(0, thresh.shape[1], num = thresh.shape[1] + 1))
     
     # Plot the image with text curve overlay
     plt.imshow(image[:,:,::-1])
-    plt.plot(np.linspace(0, thresh.shape[1]-1, num = thresh.shape[1]), (thresh.shape[0] - y_hat), color='red')
+    plt.plot(np.linspace(0, thresh.shape[1], num = thresh.shape[1] + 1), (thresh.shape[0] - y_hat), color='red')
     plt.show()
 
     # Roll each column to align the text
-    for i in range(image.shape[1]):
+    for i in range(image.shape[1] + 1):
         image[:, i, 0] = np.roll(image[:, i, 0], round(y_hat[i] - thresh.shape[0]/2))
         image[:, i, 1] = np.roll(image[:, i, 1], round(y_hat[i] - thresh.shape[0]/2))
         image[:, i, 2] = np.roll(image[:, i, 2], round(y_hat[i] - thresh.shape[0]/2))
