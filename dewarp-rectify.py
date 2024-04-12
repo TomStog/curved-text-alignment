@@ -218,6 +218,6 @@ if __name__ == "__main__":
     input_path = '.\sports.png'
     output_path = '.\sports_output.png'
     final_path = '.\sports_final.png'
-    n_splines = 7
+    n_splines = 9
     uncurve_text_tight(input_path, output_path)
     uncurve_text(output_path, final_path, n_splines)
