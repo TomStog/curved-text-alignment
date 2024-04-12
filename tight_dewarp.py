@@ -25,7 +25,7 @@ def uncurve_text(input_path, output_path, n_splines = 5):
     gam.fit(X, y)
     
     # Create the offset necessary to un-curve the text
-    y_hat = gam.predict(np.linspace(leftmost_x, rightmost_x - 1, num = rightmost_x - leftmost_x))
+    y_hat = gam.predict(np.linspace(leftmost_x, rightmost_x, num = rightmost_x - leftmost_x + 1))
     
     # Plot the image with text curve overlay
     plt.imshow(image[:,:,::-1])
