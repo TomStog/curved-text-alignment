@@ -128,15 +128,15 @@ def uncurve_text_tight(input_path, output_path, n_splines = 5):
   thresh = cv2.dilate(thresh, kernel, iterations=1)
 
   black_pixels = np.column_stack(np.where(thresh == 0))
-  leftmost_x = np.min(black_pixels[:, 1]) - int(0.05*(np.max(black_pixels[:, 1]) - np.min(black_pixels[:, 1])))
-  rightmost_x = np.max(black_pixels[:, 1]) + int(0.05*(np.max(black_pixels[:, 1]) - np.min(black_pixels[:, 1])))
+  leftmost_x = np.min(black_pixels[:, 1]) - int(0.1*(np.max(black_pixels[:, 1]) - np.min(black_pixels[:, 1])))
+  rightmost_x = np.max(black_pixels[:, 1]) + int(0.1*(np.max(black_pixels[:, 1]) - np.min(black_pixels[:, 1])))
   X = black_pixels[:, 1].reshape(-1, 1)
   y = black_pixels[:, 0]
 
   gam = LinearGAM(n_splines = n_splines)
   gam.fit(X, y)
 
-  X_new = np.linspace(leftmost_x, rightmost_x - 1, num = rightmost_x - leftmost_x)
+  X_new = np.linspace(leftmost_x, rightmost_x, num = rightmost_x - leftmost_x)
 
   # Create the offset necessary to un-curve the text
   y_hat = gam.predict(X_new)  
@@ -164,6 +164,19 @@ def uncurve_text_tight(input_path, output_path, n_splines = 5):
         pixel_values.append(thresh[y, x])
     dewarp_image[:, my_iter] = reshape_array_with_interpolation(np.array(pixel_values), (2*d+1), kind='linear')
     my_iter += 1 
+  
+  # Plot the original image
+  plt.imshow(thresh, cmap='gray', extent=[0, thresh.shape[1], thresh.shape[0], 0])
+
+  # Plot the y_hat line
+  plt.plot(X_new, y_hat, color='red')
+
+  # Plot perpendicular points
+  for points in perpendicular_points:
+      plt.plot([x[0] for x in points], [x[1] for x in points], color='blue', alpha=0.5)
+
+  plt.legend()
+  plt.show()
   
   # Plot the final image
   plt.imshow(dewarp_image, cmap=plt.cm.gray)
