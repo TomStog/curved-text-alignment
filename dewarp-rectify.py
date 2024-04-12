@@ -80,7 +80,7 @@ def find_distance_d(X, y, X_new, y_hat, step):
             d += step  # Increment d
             iteration += 1
 
-    return int(np.ceil(1.5*d))
+    return int(np.ceil(2*d))
 
 def calculate_derivative(y_values):
     dy = np.zeros(y_values.shape)
