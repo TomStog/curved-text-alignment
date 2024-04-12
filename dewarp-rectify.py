@@ -139,7 +139,12 @@ def uncurve_text_tight(input_path, output_path, n_splines = 5):
   X_new = np.linspace(leftmost_x, rightmost_x, num = rightmost_x - leftmost_x)
 
   # Create the offset necessary to un-curve the text
-  y_hat = gam.predict(X_new)  
+  y_hat = gam.predict(X_new)
+
+  # Plot the image with text curve overlay
+  plt.imshow(thresh, cmap='gray')
+  plt.plot(np.linspace(leftmost_x, rightmost_x, num = rightmost_x - leftmost_x), (y_hat), color='red')
+  plt.show()
 
   # Calculate height of text
   d = find_distance_d(X, y, X_new, y_hat, step = 0.5)
