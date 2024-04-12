@@ -203,8 +203,7 @@ def uncurve_text(input_path, output_path, n_splines=5):
     black_pixels = np.column_stack(np.where(thresh == 0))
     leftmost_x, rightmost_x = np.min(black_pixels[:, 1]), np.max(black_pixels[:, 1])
     X = black_pixels[:, 1].reshape(-1, 1)
-    y = black_pixels[:, 0]
-    y = thresh.shape[0] - y
+    y = thresh.shape[0] - black_pixels[:, 0]
     
     gam = LinearGAM(n_splines = n_splines)
     gam.fit(X, y)
