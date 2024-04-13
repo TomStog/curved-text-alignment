@@ -115,7 +115,7 @@ def find_perpendicular_points(y_values, x_values, d):
     
     return perpendicular_points
 
-def uncurve_text_tight(input_path, output_path, n_splines = 5):
+def uncurve_text_tight(input_path, output_path, n_splines = 6):
     # Load image, grayscale it, Otsu's threshold
     image = cv2.imread(input_path)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
