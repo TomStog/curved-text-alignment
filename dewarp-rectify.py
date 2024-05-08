@@ -57,6 +57,18 @@ def pad_binary_image_with_ones(image):
     
     return padded_image
 
+def chebyshev_nodes(leftmost_x, rightmost_x, num_points):
+    # Compute the Chebyshev nodes in the interval [-1, 1]
+    i = np.arange(num_points)
+    x = np.cos((2*i + 1) / (2*num_points) * np.pi)
+
+    # Scale the nodes to the interval [leftmost_x, rightmost_x]
+    scale = (rightmost_x - leftmost_x) / 2
+    shift = (rightmost_x + leftmost_x) / 2
+    x_scaled = scale * x + shift
+
+    return x_scaled
+
 def find_distance_d(X, y, X_new, y_hat, step):
     # Starting point for the distance d
     d = 0
@@ -115,7 +127,7 @@ def find_perpendicular_points(y_values, x_values, d):
     
     return perpendicular_points
 
-def uncurve_text_tight(input_path, output_path, n_splines = 6):
+def uncurve_text_tight(input_path, output_path, n_splines, chebyshev=False):
     # Load image, grayscale it, Otsu's threshold
     image = cv2.imread(input_path)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -128,22 +140,25 @@ def uncurve_text_tight(input_path, output_path, n_splines = 6):
     thresh = cv2.dilate(thresh, kernel, iterations=1)
     
     black_pixels = np.column_stack(np.where(thresh == 0))
-    leftmost_x = np.min(black_pixels[:, 1]) - int(0.1*(np.max(black_pixels[:, 1]) - np.min(black_pixels[:, 1])))
-    rightmost_x = np.max(black_pixels[:, 1]) + int(0.1*(np.max(black_pixels[:, 1]) - np.min(black_pixels[:, 1])))
+    leftmost_x = np.min(black_pixels[:, 1]) - int(0.05*(np.max(black_pixels[:, 1]) - np.min(black_pixels[:, 1])))
+    rightmost_x = np.max(black_pixels[:, 1]) + int(0.05*(np.max(black_pixels[:, 1]) - np.min(black_pixels[:, 1])))
     X = black_pixels[:, 1].reshape(-1, 1)
     y = black_pixels[:, 0]
     
     gam = LinearGAM(n_splines = n_splines)
     gam.fit(X, y)
-    
-    X_new = np.linspace(leftmost_x, rightmost_x, num = rightmost_x - leftmost_x)
+
+    if chebyshev!=True:
+        X_new = np.linspace(leftmost_x, rightmost_x, num = rightmost_x - leftmost_x)
+    else:
+        X_new = chebyshev_nodes(rightmost_x, leftmost_x, num_points = rightmost_x - leftmost_x)
     
     # Create the offset necessary to un-curve the text
     y_hat = gam.predict(X_new)
     
     # Plot the image with text curve overlay
     plt.imshow(thresh, cmap='gray')
-    plt.plot(np.linspace(leftmost_x, rightmost_x, num = rightmost_x - leftmost_x), (y_hat), color='red')
+    plt.plot(X_new, y_hat, color='red')
     plt.show()
     
     # Calculate height of text
@@ -189,7 +204,7 @@ def uncurve_text_tight(input_path, output_path, n_splines = 6):
     # Save image to desired directory
     cv2.imwrite(output_path, dewarp_image)
 
-def uncurve_text(input_path, output_path, n_splines=5):
+def uncurve_text(input_path, output_path, n_splines, chebyshev=False):
     # Load image, grayscale it, Otsu's threshold
     image = cv2.imread(input_path)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -209,11 +224,17 @@ def uncurve_text(input_path, output_path, n_splines=5):
     gam.fit(X, y)
     
     # Create the offset necessary to un-curve the text
-    y_hat = gam.predict(np.linspace(leftmost_x, rightmost_x, num = rightmost_x - leftmost_x + 1))
+    if chebyshev!=True:
+        X_new = np.linspace(leftmost_x, rightmost_x, num = rightmost_x - leftmost_x + 1)
+    else:
+        X_new = chebyshev_nodes(rightmost_x, leftmost_x, num_points = rightmost_x - leftmost_x + 1)
+    
+    # Create the offset necessary to un-curve the text
+    y_hat = gam.predict(X_new)
     
     # Plot the image with text curve overlay
     plt.imshow(image[:,:,::-1])
-    plt.plot(np.linspace(leftmost_x, rightmost_x, num = rightmost_x - leftmost_x + 1), (thresh.shape[0] - y_hat), color='red')
+    plt.plot(X_new, (thresh.shape[0] - y_hat), color='red')
     plt.show()
 
     # Roll each column to align the text
@@ -231,9 +252,10 @@ def uncurve_text(input_path, output_path, n_splines=5):
 
 if __name__ == "__main__":
     
-    input_path = '.\sports.png'
-    output_path = '.\sports_output.png'
-    final_path = '.\sports_final.png'
-    n_splines = 9
-    uncurve_text_tight(input_path, output_path)
-    uncurve_text(output_path, final_path, n_splines)
+    input_path = './sports.png'
+    output_path = './sports_output.png'
+    final_path = './sports_final.png'
+    n1_splines = 6
+    n2_splines = 9
+    uncurve_text_tight(input_path, output_path, n1_splines, chebyshev=False))
+    uncurve_text(output_path, final_path, n2_splines, chebyshev=False))
