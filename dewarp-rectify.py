@@ -5,6 +5,51 @@ from pygam import LinearGAM
 from bresenham import bresenham
 from scipy.interpolate import interp1d
 
+def divide_arc_length(X, Y, n):
+    """
+    Divides the arc length of the points (X, Y) into n equal segments.
+
+    Parameters:
+    X (array): The x-coordinates of the points.
+    Y (array): The y-coordinates of the points.
+    n (int): The number of equal segments.
+
+    Returns:
+    list: A list of x coordinates that divide the arc into n equal segments.
+    """
+    # Calculate differences between consecutive points
+    dx = np.diff(X)
+    dy = np.diff(Y)
+    
+    # Calculate the arc length increments
+    ds = np.sqrt(dx**2 + dy**2)
+    
+    # Cumulative arc length
+    s = np.concatenate(([0], np.cumsum(ds)))
+
+    # Total arc length
+    L = s[-1]
+    Delta_L = L / n
+
+    # Find the points x_i
+    x_points = [X[0]]  # Start with the initial point
+
+    for i in range(1, n):
+        target_length = i * Delta_L
+        
+        # Interpolating the x value at the target arc length
+        idx = np.searchsorted(s, target_length)
+        x0, x1 = X[idx-1], X[idx]
+        s0, s1 = s[idx-1], s[idx]
+        
+        # Linear interpolation for the x value at the target arc length
+        x_interp = x0 + (target_length - s0) * (x1 - x0) / (s1 - s0)
+        x_points.append(x_interp)
+    
+    x_points.append(X[-1])  # Include the endpoint
+
+    return x_points
+
 def reshape_array_with_interpolation(original_array, new_size, kind='linear'):
     """
     Reshape an array to a new size using interpolation.
@@ -56,18 +101,6 @@ def pad_binary_image_with_ones(image):
     padded_image[start_row:start_row + original_height, start_col:start_col + original_width] = image
     
     return padded_image
-
-def chebyshev_nodes(leftmost_x, rightmost_x, num_points):
-    # Compute the Chebyshev nodes in the interval [-1, 1]
-    i = np.arange(num_points)
-    x = np.cos((2*i + 1) / (2*num_points) * np.pi)
-
-    # Scale the nodes to the interval [leftmost_x, rightmost_x]
-    scale = (rightmost_x - leftmost_x) / 2
-    shift = (rightmost_x + leftmost_x) / 2
-    x_scaled = scale * x + shift
-
-    return x_scaled
 
 def find_distance_d(X, y, X_new, y_hat, step):
     # Starting point for the distance d
@@ -127,7 +160,7 @@ def find_perpendicular_points(y_values, x_values, d):
     
     return perpendicular_points
 
-def uncurve_text_tight(input_path, output_path, n_splines, chebyshev=False):
+def uncurve_text_tight(input_path, output_path, n_splines, arc_equal=False):
     # Load image, grayscale it, Otsu's threshold
     image = cv2.imread(input_path)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -148,10 +181,18 @@ def uncurve_text_tight(input_path, output_path, n_splines, chebyshev=False):
     gam = LinearGAM(n_splines = n_splines)
     gam.fit(X, y)
 
-    if chebyshev!=True:
+    if arc_equal!=True:
         X_new = np.linspace(leftmost_x, rightmost_x, num = rightmost_x - leftmost_x)
     else:
-        X_new = chebyshev_nodes(rightmost_x, leftmost_x, num_points = rightmost_x - leftmost_x)
+        # Generate a dense set of points for accurate arc length calculation
+        X_dense = np.linspace(leftmost_x, rightmost_x, num = rightmost_x - leftmost_x)
+        Y_dense = gam.predict(X_dense)
+
+        # Interval and number of segments
+        n = rightmost_x - leftmost_x  # Number of equal segments
+
+        # Get the points dividing the arc length into equal segments
+        X_new = divide_arc_length(X_dense, Y_dense, n)
     
     # Create the offset necessary to un-curve the text
     y_hat = gam.predict(X_new)
@@ -204,7 +245,7 @@ def uncurve_text_tight(input_path, output_path, n_splines, chebyshev=False):
     # Save image to desired directory
     cv2.imwrite(output_path, dewarp_image)
 
-def uncurve_text(input_path, output_path, n_splines, chebyshev=False):
+def uncurve_text(input_path, output_path, n_splines, arc_equal=False):
     # Load image, grayscale it, Otsu's threshold
     image = cv2.imread(input_path)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -224,10 +265,18 @@ def uncurve_text(input_path, output_path, n_splines, chebyshev=False):
     gam.fit(X, y)
     
     # Create the offset necessary to un-curve the text
-    if chebyshev!=True:
+    if arc_equal!=True:
         X_new = np.linspace(leftmost_x, rightmost_x, num = rightmost_x - leftmost_x + 1)
     else:
-        X_new = chebyshev_nodes(rightmost_x, leftmost_x, num_points = rightmost_x - leftmost_x + 1)
+        # Generate a dense set of points for accurate arc length calculation
+        X_dense = np.linspace(leftmost_x, rightmost_x, num = rightmost_x - leftmost_x + 1)
+        Y_dense = gam.predict(X_dense)
+
+        # Interval and number of segments
+        n = rightmost_x - leftmost_x + 1 # Number of equal segments
+
+        # Get the points dividing the arc length into equal segments
+        X_new = divide_arc_length(X_dense, Y_dense, n)
     
     # Create the offset necessary to un-curve the text
     y_hat = gam.predict(X_new)
@@ -257,5 +306,5 @@ if __name__ == "__main__":
     final_path = './sports_final.png'
     n1_splines = 6
     n2_splines = 9
-    uncurve_text_tight(input_path, output_path, n1_splines, chebyshev=False))
-    uncurve_text(output_path, final_path, n2_splines, chebyshev=False))
+    uncurve_text_tight(input_path, output_path, n1_splines, arc_equal=False))
+    uncurve_text(output_path, final_path, n2_splines, arc_equal=False))
