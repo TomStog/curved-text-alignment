@@ -200,6 +200,8 @@ def uncurve_text_tight(input_path, output_path, n_splines, arc_equal=False):
     # Plot the image with text curve overlay
     plt.imshow(thresh, cmap='gray')
     plt.plot(X_new, y_hat, color='red')
+    plt.axis('off')
+    plt.subplots_adjust(bottom = 0, left = 0, right = 1, top = 1)
     plt.show()
     
     # Calculate height of text
@@ -236,10 +238,14 @@ def uncurve_text_tight(input_path, output_path, n_splines, arc_equal=False):
     for points in perpendicular_points:
       plt.plot([x[0] for x in points], [x[1] for x in points], color='blue', alpha=0.5)
     
+    plt.axis('off')
+    plt.subplots_adjust(bottom = 0, left = 0, right = 1, top = 1)
     plt.show()
     
     # Plot the final image
     plt.imshow(dewarp_image, cmap=plt.cm.gray)
+    plt.axis('off')
+    plt.subplots_adjust(bottom = 0, left = 0, right = 1, top = 1)
     plt.show()
     
     # Save image to desired directory
@@ -284,6 +290,8 @@ def uncurve_text(input_path, output_path, n_splines, arc_equal=False):
     # Plot the image with text curve overlay
     plt.imshow(image[:,:,::-1])
     plt.plot(X_new, (thresh.shape[0] - y_hat), color='red')
+    plt.axis('off')
+    plt.subplots_adjust(bottom = 0, left = 0, right = 1, top = 1)
     plt.show()
 
     # Roll each column to align the text
@@ -294,6 +302,8 @@ def uncurve_text(input_path, output_path, n_splines, arc_equal=False):
   
     # Plot the final image
     plt.imshow(image[:,:,::-1])
+    plt.axis('off')
+    plt.subplots_adjust(bottom = 0, left = 0, right = 1, top = 1)
     plt.show()
     
     # Save image to desired directory
@@ -306,5 +316,5 @@ if __name__ == "__main__":
     final_path = './sports_final.png'
     n1_splines = 6
     n2_splines = 9
-    uncurve_text_tight(input_path, output_path, n1_splines, arc_equal=False))
+    uncurve_text_tight(input_path, output_path, n1_splines, arc_equal=True))
     uncurve_text(output_path, final_path, n2_splines, arc_equal=False))
