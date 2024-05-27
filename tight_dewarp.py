@@ -29,6 +29,8 @@ def uncurve_text(input_path, output_path, n_splines = 5):
     # Plot the image with text curve overlay
     plt.imshow(image[:,:,::-1])
     plt.plot(np.linspace(leftmost_x, rightmost_x, num = rightmost_x - leftmost_x + 1), (thresh.shape[0] - y_hat), color='red')
+    plt.axis('off')
+    plt.subplots_adjust(bottom = 0, left = 0, right = 1, top = 1)
     plt.show()
 
     # Roll each column to align the text
@@ -39,6 +41,8 @@ def uncurve_text(input_path, output_path, n_splines = 5):
 
     # Plot the final image
     plt.imshow(image[:,:,::-1])
+    plt.axis('off')
+    plt.subplots_adjust(bottom = 0, left = 0, right = 1, top = 1)
     plt.show()
     
     # Save image to desired directory
