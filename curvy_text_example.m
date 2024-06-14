@@ -14,4 +14,4 @@ y = polyval(p, x);
 % Define coordinates for the curvy text
 xy = [x; y];
 
-mymycurvytext(xy, 'Lorem ipsum dolor sit amet', 'FontSize', 20, 'Color', 'black', 'FontWeight', 'bold');
+curvytextgenerator(xy, 'Lorem ipsum dolor sit amet', 'FontSize', 20, 'Color', 'black', 'FontWeight', 'bold');
