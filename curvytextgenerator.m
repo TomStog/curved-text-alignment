@@ -1,4 +1,4 @@
-function mymycurvytext(xy, str, varargin)
+function curvytextgenerator(xy, str, varargin)
     if size(xy,1) > 2
         xy = xy';
     end
