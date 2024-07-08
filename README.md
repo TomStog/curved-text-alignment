@@ -74,6 +74,8 @@ Both functions exhibit comparable performance, with no discernible advantage in 
 
 ![Output image](./images/sports_final.png?raw=true)
 
+The rectification dataset can be viewed and downloaded through this [link](https://mega.nz/folder/CQJhEQqB#J4IrsiatBhKXYn14K9IzMQ).
+
 ## Citation
 
 If you have found value in this repository, we kindly request that you consider citing it as a source of reference:
