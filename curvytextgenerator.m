@@ -32,7 +32,7 @@ function curvytextgenerator(xy, str, varargin)
         dXY_temp = XY(:, letterIndex + 1) - XY(:, letterIndex);
         theta = atan2(dXY_temp(2), dXY_temp(1)) / (2 * pi) * 360;
 
-        h = text(letterPos(1), letterPos(2), str(i), 'rotation', theta, ...
+        text(letterPos(1), letterPos(2), str(i), 'rotation', theta, ...
              'horizontalalignment', 'center', 'verticalalignment', 'middle', varargin{:});
     end
     
