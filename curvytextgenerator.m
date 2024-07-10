@@ -32,7 +32,7 @@ function curvytextgenerator(xy, str, varargin)
         dXY_temp = XY(:, letterIndex + 1) - XY(:, letterIndex);
         theta = atan2(dXY_temp(2), dXY_temp(1)) / (2 * pi) * 360;
 
-        text(letterPos(1), letterPos(2), str(i), 'rotation', theta, ...
+        h = text(letterPos(1), letterPos(2), str(i), 'rotation', theta, ...
              'horizontalalignment', 'center', 'verticalalignment', 'middle', varargin{:});
     end
     
@@ -42,11 +42,8 @@ function curvytextgenerator(xy, str, varargin)
     maxX = max(xy(1,:));
     maxY = max(xy(2,:));
     
-    %xlim([min([minX, minY]), max([maxX, maxY])]);
-    %ylim([min([minX, minY]), max([maxX, maxY])]);
-    
-    xlim([min(xy(1,:)), max(xy(1,:))]);
-    ylim([min(xy(2,:)), max(xy(2,:))]);
+    xlim([minX, maxX]);
+    ylim([minY, maxY]);
     
     axis equal;
     axis off;
