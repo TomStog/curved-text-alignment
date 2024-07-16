@@ -64,15 +64,15 @@ Both functions exhibit comparable performance, with no discernible advantage in 
 
 1) Input Image :
 
-![Output image](./images/sports.png?raw=true)
+![Output image](./images/fig2.png?raw=true)
 
 2) Semi-processed Image :
 
-![Output image](./images/sports_output.png?raw=true)
+![Output image](./images/fig2-semi.png?raw=true)
 
 3) Output Image :
 
-![Output image](./images/sports_final.png?raw=true)
+![Output image](./images/fig2-final.png?raw=true)
 
 The rectification dataset can be viewed and downloaded through this [link](https://mega.nz/folder/CQJhEQqB#J4IrsiatBhKXYn14K9IzMQ).
 
