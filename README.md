@@ -82,3 +82,5 @@ If you have found value in this repository, we kindly request that you consider 
 
 Stogiannopoulos, Thomas. “Curved Line Text Alignment: A Function That Takes as Input a Cropped Text Line Image, and Outputs the Dewarped Image.”
 GitHub, December 1, 2022. https://github.com/TomStog/curved-text-alignment.
+
+For more information, you can also check my paper [here](https://doi.org/10.3390/signals5040039).
