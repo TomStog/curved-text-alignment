@@ -83,21 +83,14 @@ If you have found value in this repository, we kindly request that you consider 
 Stogiannopoulos, Thomas. “Curved Line Text Alignment: A Function That Takes as Input a Cropped Text Line Image, and Outputs the Dewarped Image.”
 GitHub, December 1, 2022. https://github.com/TomStog/curved-text-alignment.
 
-For more information, you can also check my paper [here](https://doi.org/10.3390/signals5040039).
+For more information, you can also check my paper "Curved Text Line Rectification via Bresenham’s Algorithm and Generalized Additive Models" [here](https://doi.org/10.3390/signals5040039).
 
-### For a journal article
 ```
-@article{XXX,     % use first letters of authors names + year
-  Author  = {},   % keep only family name: C. Audet and not Charles Audet
-  Title   = {{}}, % double braces to respect lower/upper cases
-  Journal = {},   % full name
-  Volume  = {},
-  Number  = {},
-  Pages   = {},   % with format 34--45 with two "-"
-  Year    = {},
-  Doi     = {},
-  Url     = {http://dx.doi.org/},
-  Date-Added    = {2021-03-xx},
-  Date-Modified = {2021-03-xx}
-} % added by NAME
+@article{Stogiannopoulos2024CurvedTL,
+  title={Curved Text Line Rectification via Bresenham’s Algorithm and Generalized Additive Models},
+  author={Thomas Stogiannopoulos and Ilias Theodorakopoulos},
+  journal={Signals},
+  year={2024},
+  url={https://api.semanticscholar.org/CorpusID:273595704}
+}
 ```
