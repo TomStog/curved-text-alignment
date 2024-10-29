@@ -85,14 +85,19 @@ GitHub, December 1, 2022. https://github.com/TomStog/curved-text-alignment.
 
 For more information, you can also check my paper [here](https://doi.org/10.3390/signals5040039).
 
-@article{your_paper,
-    author = {Author, A. and Contributor, B.},
-    title = {Title of Your Paper},
-    journal = {Journal Name},
-    year = {Year},
-    volume = {Volume},
-    number = {Number},
-    pages = {Pages},
-    doi = {DOI},
-    url = {URL}
-}
+### For a journal article
+```
+@article{XXX,     % use first letters of authors names + year
+  Author  = {},   % keep only family name: C. Audet and not Charles Audet
+  Title   = {{}}, % double braces to respect lower/upper cases
+  Journal = {},   % full name
+  Volume  = {},
+  Number  = {},
+  Pages   = {},   % with format 34--45 with two "-"
+  Year    = {},
+  Doi     = {},
+  Url     = {http://dx.doi.org/},
+  Date-Added    = {2021-03-xx},
+  Date-Modified = {2021-03-xx}
+} % added by NAME
+```
