@@ -84,3 +84,15 @@ Stogiannopoulos, Thomas. “Curved Line Text Alignment: A Function That Takes as
 GitHub, December 1, 2022. https://github.com/TomStog/curved-text-alignment.
 
 For more information, you can also check my paper [here](https://doi.org/10.3390/signals5040039).
+
+@article{your_paper,
+    author = {Author, A. and Contributor, B.},
+    title = {Title of Your Paper},
+    journal = {Journal Name},
+    year = {Year},
+    volume = {Volume},
+    number = {Number},
+    pages = {Pages},
+    doi = {DOI},
+    url = {URL}
+}
