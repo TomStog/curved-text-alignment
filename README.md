@@ -76,6 +76,15 @@ Both functions exhibit comparable performance, with no discernible advantage in 
 
 The rectification dataset can be viewed and downloaded through this [link](https://mega.nz/folder/CQJhEQqB#J4IrsiatBhKXYn14K9IzMQ).
 
+## Results and Performance
+
+| Warping Function | DW | Word Error Rate w/o Rectification | Character Error Rate w/o Rectification | Word Error Rate w/ Rectification | Character Error Rate w/ Rectification |
+| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
+| y = -x             | 99.86 % | 0.9440 | 0.5063 | 0.1552 | 0.0237 |
+| y = x<sup>2</sup>  | 99.86 % | 1.3352 | 0.8339 | 0.3973 | 0.0620 |
+| y = -x<sup>3</sup> | 99.88 % | 1.1067 | 0.6613 | 0.1838 | 0.0318 |
+| y = x<sup>4</sup>  | 99.92 % | 1.7962 | 0.7910 | 0.3772 | 0.0575 |
+
 ## Citation
 
 If you have found value in this repository, we kindly request that you consider citing it as a source of reference:
