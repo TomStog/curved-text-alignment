@@ -78,12 +78,20 @@ The rectification dataset can be viewed and downloaded through this [link](https
 
 ## Results and Performance
 
+The number of splines used for the initial curve estimation is 8, and the number of splines used for the final alignment is 12.
+
 | Warping Function   |    DW    | Word Error Rate w/o Rectification | Character Error Rate w/o Rectification | Word Error Rate w/ Rectification | Character Error Rate w/ Rectification |
 |:------------------:|:--------:|:---------------------------------:|:-------------------------------------:|:---------------------------------:|:-------------------------------------:|
 | y = -x             | 99.86% |              0.9440              |                0.5063                 |              0.1552              |                0.0237                 |
 | y = x<sup>2</sup>  | 99.86% |              1.3352              |                0.8339                 |              0.3973              |                0.0620                 |
 | y = -x<sup>3</sup> | 99.88% |              1.1067              |                0.6613                 |              0.1838              |                0.0318                 |
 | y = x<sup>4</sup>  | 99.92% |              1.7962              |                0.7910                 |              0.3772              |                0.0575                 |
+
+Suppose we aim to improve performance for the y = x<sup>2</sup> scenario by identifying an optimal set of numbers. Below is the variation in CER and WER scores based on the number of splines used:
+
+![cer](https://github.com/user-attachments/assets/6eac36a7-8b57-44eb-82c7-22911672cfd2)
+
+![wer](https://github.com/user-attachments/assets/e2ec37df-f70c-4833-b111-d542cb5232c0)
 
 ## Citation
 
