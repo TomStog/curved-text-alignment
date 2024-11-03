@@ -78,13 +78,12 @@ The rectification dataset can be viewed and downloaded through this [link](https
 
 ## Results and Performance
 
-| Warping Function       | DW          | Word Error Rate w/o Rectification | Character Error Rate w/o Rectification | Word Error Rate w/ Rectification | Character Error Rate w/ Rectification |
-|------------------------|-------------|-----------------------------------|---------------------------------------|----------------------------------|--------------------------------------|
-| <center>y = -x</center>             | <center>99.86 %</center> | <center>0.9440</center> | <center>0.5063</center> | <center>0.1552</center> | <center>0.0237</center> |
-| <center>y = x<sup>2</sup></center>  | <center>99.86 %</center> | <center>1.3352</center> | <center>0.8339</center> | <center>0.3973</center> | <center>0.0620</center> |
-| <center>y = -x<sup>3</sup></center> | <center>99.88 %</center> | <center>1.1067</center> | <center>0.6613</center> | <center>0.1838</center> | <center>0.0318</center> |
-| <center>y = x<sup>4</sup></center>  | <center>99.92 %</center> | <center>1.7962</center> | <center>0.7910</center> | <center>0.3772</center> | <center>0.0575</center> |
-
+| Warping Function   |    DW    | Word Error Rate w/o Rectification | Character Error Rate w/o Rectification | Word Error Rate w/ Rectification | Character Error Rate w/ Rectification |
+|:------------------:|:--------:|:---------------------------------:|:-------------------------------------:|:---------------------------------:|:-------------------------------------:|
+| y = -x             | 99.86% |              0.9440              |                0.5063                 |              0.1552              |                0.0237                 |
+| y = x<sup>2</sup>  | 99.86% |              1.3352              |                0.8339                 |              0.3973              |                0.0620                 |
+| y = -x<sup>3</sup> | 99.88% |              1.1067              |                0.6613                 |              0.1838              |                0.0318                 |
+| y = x<sup>4</sup>  | 99.92% |              1.7962              |                0.7910                 |              0.3772              |                0.0575                 |
 
 ## Citation
 
