@@ -33,10 +33,11 @@ def dewarp_text(input_path, output_path, n_splines = 5):
     plt.show()
 
     # Roll each column to align the text
-    for i in range(image.shape[1] + 1):
-        image[:, i, 0] = np.roll(image[:, i, 0], round(y_hat[i] - thresh.shape[0]/2))
-        image[:, i, 1] = np.roll(image[:, i, 1], round(y_hat[i] - thresh.shape[0]/2))
-        image[:, i, 2] = np.roll(image[:, i, 2], round(y_hat[i] - thresh.shape[0]/2))
+    for i in range(image.shape[1]):
+        shift = round(thresh.shape[0]/2 - y_hat[i])
+        image[:, i, 0] = np.roll(image[:, i, 0], shift)
+        image[:, i, 1] = np.roll(image[:, i, 1], shift)
+        image[:, i, 2] = np.roll(image[:, i, 2], shift)
 
     # Plot the final image
     plt.imshow(image[:,:,::-1])
