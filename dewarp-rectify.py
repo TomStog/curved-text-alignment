@@ -316,5 +316,5 @@ if __name__ == "__main__":
     final_path = './sports_final.png'
     n1_splines = 6
     n2_splines = 9
-    uncurve_text_tight(input_path, output_path, n1_splines, arc_equal=True))
-    uncurve_text(output_path, final_path, n2_splines, arc_equal=False))
+    uncurve_text_tight(input_path, output_path, n1_splines, arc_equal=True)
+    uncurve_text(output_path, final_path, n2_splines, arc_equal=False)
