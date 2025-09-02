@@ -35,9 +35,10 @@ def uncurve_text(input_path, output_path, n_splines = 5):
 
     # Roll each column to align the text
     for i in range(leftmost_x, rightmost_x + 1):
-        image[:, i, 0] = np.roll(image[:, i, 0], round(y_hat[i - leftmost_x] - thresh.shape[0]/2))
-        image[:, i, 1] = np.roll(image[:, i, 1], round(y_hat[i - leftmost_x] - thresh.shape[0]/2))
-        image[:, i, 2] = np.roll(image[:, i, 2], round(y_hat[i - leftmost_x] - thresh.shape[0]/2))
+        shift = round(y_hat[i - leftmost_x] - thresh.shape[0]/2)
+        image[:, i, 0] = np.roll(image[:, i, 0], shift)
+        image[:, i, 1] = np.roll(image[:, i, 1], shift)
+        image[:, i, 2] = np.roll(image[:, i, 2], shift)
 
     # Plot the final image
     plt.imshow(image[:,:,::-1])
