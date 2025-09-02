@@ -296,9 +296,10 @@ def uncurve_text(input_path, output_path, n_splines, arc_equal=False):
 
     # Roll each column to align the text
     for i in range(leftmost_x, rightmost_x + 1):
-        image[:, i, 0] = np.roll(image[:, i, 0], round(y_hat[i - leftmost_x] - thresh.shape[0]/2))
-        image[:, i, 1] = np.roll(image[:, i, 1], round(y_hat[i - leftmost_x] - thresh.shape[0]/2))
-        image[:, i, 2] = np.roll(image[:, i, 2], round(y_hat[i - leftmost_x] - thresh.shape[0]/2))
+        shift = round(y_hat[i - leftmost_x] - thresh.shape[0]/2)
+        image[:, i, 0] = np.roll(image[:, i, 0], shift)
+        image[:, i, 1] = np.roll(image[:, i, 1], shift)
+        image[:, i, 2] = np.roll(image[:, i, 2], shift)
   
     # Plot the final image
     plt.imshow(image[:,:,::-1])
@@ -316,5 +317,5 @@ if __name__ == "__main__":
     final_path = './sports_final.png'
     n1_splines = 6
     n2_splines = 9
-    uncurve_text_tight(input_path, output_path, n1_splines, arc_equal=True))
-    uncurve_text(output_path, final_path, n2_splines, arc_equal=False))
+    uncurve_text_tight(input_path, output_path, n1_splines, arc_equal=True)
+    uncurve_text(output_path, final_path, n2_splines, arc_equal=False)
